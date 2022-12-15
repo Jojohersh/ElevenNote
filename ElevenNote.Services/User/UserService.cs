@@ -44,14 +44,14 @@ namespace ElevenNote.Services.User
         {
             var foundUser = await _context.Users.FirstOrDefaultAsync(u => u.Username.ToLower() == username.ToLower());
 
-            return (foundUser is null);
+            return (foundUser == null);
         }
 
         public async Task<bool> CheckEmailIsAvailable(string emailAddress)
         {
             var foundUser = await _context.Users.FirstOrDefaultAsync(user => user.Email == emailAddress);
 
-            return (foundUser is null);
+            return (foundUser == null);
         }
     }
 }
