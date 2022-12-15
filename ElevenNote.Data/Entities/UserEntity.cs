@@ -17,8 +17,8 @@ namespace ElevenNote.Data.Entities
         public string Username {get;set;} = null!;
         [Required]
         public string Password {get;set;} = null!;
-        public string FirstName {get; set;} = null!;
-        public string LastName {get;set;} = null!;
+        public string FirstName {get; set;}
+        public string LastName {get;set;}
         [Required]
         public DateTime DateCreated {get;set;}
     }
