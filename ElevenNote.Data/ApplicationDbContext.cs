@@ -13,6 +13,6 @@ namespace ElevenNote.Data
             : base(options)
         {
         }
-        public DbSet<UserEntity> Users{get; set;}
+        public DbSet<UserEntity> Users{get; set;} =null!;
     }
 }
