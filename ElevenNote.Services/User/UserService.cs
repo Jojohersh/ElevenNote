@@ -43,6 +43,24 @@ namespace ElevenNote.Services.User
             return numberOfChanges == 1;
         }
 
+        public async Task<UserDetail> GetUserByIdAsync(int userId)
+        {
+            var foundUser = await _context.Users.FindAsync(userId);
+            if (foundUser is null) {
+                return null;
+            }
+            var userDetail = new UserDetail() {
+                Id = foundUser.Id,
+                Email = foundUser.Email,
+                Username = foundUser.Username,
+                FirstName = foundUser.FirstName,
+                LastName = foundUser.LastName,
+                DateCreated = foundUser.DateCreated
+            };
+            return userDetail;
+        }
+
+        //helper methods
         public async Task<bool> CheckUsernameIsAvailable(string username)
         {
             var foundUser = await _context.Users.FirstOrDefaultAsync(u => u.Username.ToLower() == username.ToLower());
