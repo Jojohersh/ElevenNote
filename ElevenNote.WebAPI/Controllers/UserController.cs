@@ -21,6 +21,7 @@ namespace ElevenNote.WebAPI.Controllers
         public UserController(IUserService userService, ITokenService tokenService)
         {
             _userService = userService;
+            _tokenService = tokenService;
         }
 
         [HttpPost("Register")]
