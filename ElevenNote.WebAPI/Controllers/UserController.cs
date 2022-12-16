@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ElevenNote.Models.Token;
 using ElevenNote.Models.User;
+using ElevenNote.Services.Token;
 using ElevenNote.Services.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,10 +15,12 @@ namespace ElevenNote.WebAPI.Controllers
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly IUserService _service;
-        public UserController(IUserService service)
+        private readonly IUserService _userService;
+        private readonly ITokenService _tokenService;
+
+        public UserController(IUserService userService, ITokenService tokenService)
         {
-            _service = service;
+            _userService = userService;
         }
 
         [HttpPost("Register")]
@@ -26,7 +30,7 @@ namespace ElevenNote.WebAPI.Controllers
             {
                 return BadRequest(ModelState);
             }
-            var registerResult = await _service.RegisterUserAsync(model);
+            var registerResult = await _userService.RegisterUserAsync(model);
 
             if (registerResult)
             {
@@ -39,13 +43,30 @@ namespace ElevenNote.WebAPI.Controllers
         [HttpGet("{userId:int}")]
         public async Task<IActionResult> GetById([FromRoute] int userId)
         {
-            var foundUser = await _service.GetUserByIdAsync(userId);
+            var foundUser = await _userService.GetUserByIdAsync(userId);
             if (foundUser is null)
             {
                 return NotFound();
             }
 
             return Ok(foundUser);
+        }
+    
+        [HttpPost("~/api/Token")]
+        public async Task<IActionResult> Token([FromBody] TokenRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var tokenResponse = await _tokenService.GetTokenAsync(request);
+            if (tokenResponse is null)
+            {
+                return BadRequest("Invalid username or password");
+            }
+
+            return Ok(tokenResponse);
         }
     }
 }
