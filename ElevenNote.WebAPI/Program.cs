@@ -1,5 +1,6 @@
 using System.Text;
 using ElevenNote.Data;
+using ElevenNote.Services.Note;
 using ElevenNote.Services.Token;
 using ElevenNote.Services.User;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -43,10 +44,12 @@ builder.Services.AddSwaggerGen( c =>
 });
 
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+//allows us to pass http info to services
+builder.Services.AddHttpContextAccessor();
 //Add User Service/Interface for Dependency Injection here
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<INoteService, NoteService>();
 //add our authentication method using JWT tokens
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
