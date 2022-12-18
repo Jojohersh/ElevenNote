@@ -13,6 +13,16 @@ namespace ElevenNote.Data
             : base(options)
         {
         }
-        public DbSet<UserEntity> Users{get; set;} =null!;
+        public DbSet<UserEntity> Users { get; set; }
+        public DbSet<NoteEntity> Notes { get; set; }
+
+        //using the fluent API to establish relationships
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<NoteEntity> ()
+                .HasOne(notes => notes.Owner)
+                .WithMany(person => person.Notes)
+                .HasForeignKey(notes => notes.OwnerId);
+        }
     }
 }
