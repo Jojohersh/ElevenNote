@@ -61,5 +61,14 @@ namespace ElevenNote.WebAPI.Controllers
             ? Ok("Note updated successfully")
             : BadRequest("Could not successfully update note");
         }
+
+        [HttpDelete]
+        [Route("{noteId}")]
+        public async Task<IActionResult> DeleteNote([FromRoute] int noteId)
+        {
+            return await _noteService.DeleteNoteAsync(noteId)
+                ? Ok($"Note {noteId} successfully deleted")
+                : BadRequest($"Failed to delete note {noteId}");
+        }
     }
 }

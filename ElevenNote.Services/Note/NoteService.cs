@@ -93,6 +93,19 @@ namespace ElevenNote.Services.Note
 
             return numberOfChanges == 1;
         }
-    
+
+        public async Task<bool> DeleteNoteAsync(int noteId)
+        {
+            var noteEntity = await _dbContext.Notes.FindAsync(noteId);
+
+            if (noteEntity?.OwnerId != _userId)
+                return false;
+            
+            _dbContext.Remove(noteEntity);
+
+            var numberOfChanges = await _dbContext.SaveChangesAsync();
+
+            return numberOfChanges == 1;
+        }
     }
 }
