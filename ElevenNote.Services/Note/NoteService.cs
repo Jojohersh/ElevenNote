@@ -74,5 +74,25 @@ namespace ElevenNote.Services.Note
                 ModifiedUTC = noteEntity.ModifiedUtc
             };
         }
+    
+        public async Task<bool> UpdateNoteAsync(NoteUpdate request)
+        {
+            var noteEntity = await _dbContext.Notes.FindAsync(request.Id);
+
+            //check if noteEntiry is null, then check that OwnerId == _userId
+            if (noteEntity?.OwnerId != _userId)
+                return false;
+            
+            //update all the stored info
+            noteEntity.Title = request.Title;
+            noteEntity.Content = request.Content;
+            noteEntity.ModifiedUtc = DateTimeOffset.Now;
+            
+            // save db changes
+            var numberOfChanges = await _dbContext.SaveChangesAsync();
+
+            return numberOfChanges == 1;
+        }
+    
     }
 }
